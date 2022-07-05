@@ -9,7 +9,7 @@ class User(models.Model):
     image = models.ImageField(upload_to='cloudinary')
     
 class Project(models.Model):
-    user = models.ForeignKey(User, on_delete=CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=255)
     time_interval = models.IntegerField(default=None)
     break_interval = models.IntegerField(default=None)
@@ -17,7 +17,7 @@ class Project(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     
 class Reviews(models.Model):
-    user = models.ForeignKey(User, on_delete=CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     efficiency = models.IntegerField()
     experience = models.IntegerField()
     productivity = models.IntegerField()
