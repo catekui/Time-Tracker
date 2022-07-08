@@ -1,6 +1,8 @@
 from django.urls import path,include
 from rest_framework import routers
 from . import views
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+
 
 # from .views import *
 
@@ -10,6 +12,7 @@ router.register(r'Project', views.ProjectViewSet)
 router.register(r'reviews', views.ReviewsViewSet)
 # router.register(r'<id>', views.TrialViewSet)
 urlpatterns = [
+    
     path('',include(router.urls)),
     path('home/', views.ApiOverview, name='home'),
     path('api/auth',include('rest_framework.urls')),
@@ -19,4 +22,5 @@ urlpatterns = [
     path('project-create', views.projectCreate, name='project-create'),
     path('project-update/<str:id>/', views.projectUpdate, name='project-update'),
     path('project-delete/<str:id>/', views.projectDelete, name='project-delete'),
+    path('user-update/<str:id>/', views.userUpdate, name='user-update'),
 ]

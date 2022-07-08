@@ -90,6 +90,8 @@ def projectUpdate(request,id):
         serializer.save()
     return Response(serializer.data)
 
+
+
 @api_view(['DELETE'])
 def projectDelete(request,id):
     projects = Project.objects.get(id = id) 
@@ -109,3 +111,13 @@ def ApiOverview(request):
     }
   
     return Response(api_urls)
+
+
+########user###############################
+@api_view(['POST'])
+def userUpdate(request,id):
+    user = User.objects.get(id = id) 
+    serializer = UserSerializer(instance=user,data=request.data)  
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
