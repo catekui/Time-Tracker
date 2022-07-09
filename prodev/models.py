@@ -13,7 +13,7 @@ class User(models.Model):
     
 class Project(models.Model):
     choices_activity = (
-        ('meditation','Maditation'),
+        ('meditation','Meditation'),
         ('stretch','Stretch'),
         ('run','Run'),
         ('take a walk','Take a walk'),
@@ -22,7 +22,7 @@ class Project(models.Model):
         
         
     ) 
-    
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=255)
     time_interval = models.IntegerField(default=None)
