@@ -1,7 +1,8 @@
 from django.urls import path,include
 from rest_framework import routers
 from . import views
-from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+from .views import RegisterView,LoginView,UserView,LogoutView
+
 
 
 # from .views import *
@@ -14,6 +15,10 @@ router.register(r'reviews', views.ReviewsViewSet)
 urlpatterns = [
     
     path('',include(router.urls)),
+    path('register',RegisterView.as_view()),
+    path('login', LoginView.as_view()),
+    path('kid', UserView.as_view()),
+    path('logout', LogoutView.as_view()),
     path('home/', views.ApiOverview, name='home'),
     path('api/auth',include('rest_framework.urls')),
     path('project-list', views.projectList, name='project-list'),
