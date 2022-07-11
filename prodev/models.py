@@ -5,20 +5,36 @@ class User(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=250, unique=True)
     password = models.CharField(max_length=255)
-    profession = models.CharField(max_length=255)
+    profession = models.CharField(max_length=255 ,null=True, blank=True)
     image = models.ImageField(upload_to='cloudinary')
+    
+    def __str__(self):
+        return self.name
     
 class Project(models.Model):
 
+
     user = models.ForeignKey(User, related_name="projects", on_delete=models.CASCADE)
     # user = models.ForeignKey(User)
+    # choices_activity = (
+    #     ('meditation','Meditation'),
+    #     ('stretch','Stretch'),
+    #     ('run','Run'),
+    #     ('take a walk','Take a walk'),
+    #     ('listen to music','Listen to music'),
+    #     ('take a glass of water','Take a glass of water'),
+        
+        
+    # ) 
+
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     description = models.CharField(max_length=255)
     time_interval = models.IntegerField(default=None)
     break_interval = models.IntegerField(default=None)
-    activity = models.CharField(max_length=255)
+    # activity = models.CharField(max_length=255,choices= choices_activity)
+    
     date_added = models.DateTimeField(auto_now_add=True)
     
 class Reviews(models.Model):
@@ -27,9 +43,11 @@ class Reviews(models.Model):
     experience = models.IntegerField()
     productivity = models.IntegerField()
 
-
-
-
-
     
-
+    
+class Activity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    date_added = models.DateTimeField(auto_now_add=True)
+    
+    
