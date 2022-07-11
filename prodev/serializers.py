@@ -1,7 +1,7 @@
 from rest_framework import serializers
  
 # import model from models.py
-from .models import User,Project,Reviews
+from .models import User,Project,Reviews,Activity
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -38,4 +38,14 @@ class ProjectSerializer(serializers.ModelSerializer):
 class ReviewsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Reviews
+        fields = '__all__'
+        
+class ActivitySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Activity
+        fields = '__all__'       
+        
+class ActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
         fields = '__all__'
