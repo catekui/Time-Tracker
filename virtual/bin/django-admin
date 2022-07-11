@@ -1,8 +1,4 @@
-
 #!/home/moringa/Documents/Time-Tracker/virtual/bin/python
-
-#!/home/dpo/Time-Tracker/virtual/bin/python
-
 # -*- coding: utf-8 -*-
 import re
 import sys
