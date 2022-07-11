@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-from .serializers import ProjectSerializer,ReviewsSerializer,UserSerializer
-from .models import User,Project,Reviews
+from .serializers import ProjectSerializer,ReviewsSerializer,UserSerializer,ActivitySerializer
+from .models import User,Project,Reviews,Activity
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
@@ -107,6 +107,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
 # # class TrialViewSet(viewsets.ModelViewSet,id):
 # #      queryset = Project.objects.all().filter(id=id)
 # #      serializer_class = ProjectSerializer    
+
+
+class ActivityViewSet(viewsets.ModelViewSet):
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+    
     
 class ReviewsViewSet(viewsets.ModelViewSet):
      queryset = Reviews.objects.all()
@@ -146,6 +152,7 @@ def projectDetail(request,id):
     projects = Project.objects.get(id = id) 
     serializer = ProjectSerializer(projects,many=False)  
     return Response(serializer.data)
+
 
 
 @api_view(['POST'])
@@ -196,3 +203,54 @@ def userUpdate(request,id):
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
+
+
+#################activity#################################################3
+
+@api_view(['GET'])
+def activityList(request):
+    activities = Activity.objects.all() 
+    serializer = ActivitySerializer(activities,many=True)  
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def activityList_user(request,user_id):
+    activities = Activity.objects.filter(user=user_id) 
+    serializer = ActivitySerializer(activities,many=True)  
+    return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+def activityDetail(request,id):
+    activities= Activity.objects.get(id = id) 
+    serializer = ActivitySerializer(activities,many=False)  
+    return Response(serializer.data)
+
+
+
+@api_view(['POST'])
+def activityCreate(request):
+    
+    serializer = ActivitySerializer(data=request.data)  
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def activityUpdate(request,id):
+    activities = Activity.objects.get(id = id)
+    serializer = ActivitySerializer(instance=activities,data=request.data)  
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+
+
+@api_view(['DELETE'])
+def projectDelete(request,id):
+    activities = Activity.objects.get(id = id) 
+    activities.delete()
+    
+    return Response('item successfully deleted')

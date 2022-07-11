@@ -29,12 +29,26 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
+
+set -gx VIRTUAL_ENV '/home/moringa/Documents/Time-Tracker/virtual'
+
+# https://github.com/fish-shell/fish-shell/issues/436 altered PATH handling
+if test (echo $FISH_VERSION | head -c 1) -lt 3
+   set -gx _OLD_VIRTUAL_PATH (_bashify_path $PATH)
+else
+    set -gx _OLD_VIRTUAL_PATH $PATH
+end
+set -gx PATH "$VIRTUAL_ENV"'/bin' $PATH
+
+# Unset `$PYTHONHOME` if set.
+
 set -gx VIRTUAL_ENV "/home/dpo/Time-Tracker/virtual"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
 
 # unset PYTHONHOME if set
+
 if set -q PYTHONHOME
     set -gx _OLD_VIRTUAL_PYTHONHOME $PYTHONHOME
     set -e PYTHONHOME
