@@ -12,6 +12,10 @@ class User(models.Model):
         return self.name
     
 class Project(models.Model):
+
+
+    user = models.ForeignKey(User, related_name="projects", on_delete=models.CASCADE)
+    # user = models.ForeignKey(User)
     # choices_activity = (
     #     ('meditation','Meditation'),
     #     ('stretch','Stretch'),
@@ -23,7 +27,9 @@ class Project(models.Model):
         
     # ) 
 
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     description = models.CharField(max_length=255)
     time_interval = models.IntegerField(default=None)
     break_interval = models.IntegerField(default=None)
@@ -36,6 +42,7 @@ class Reviews(models.Model):
     efficiency = models.IntegerField()
     experience = models.IntegerField()
     productivity = models.IntegerField()
+
     
     
 class Activity(models.Model):
