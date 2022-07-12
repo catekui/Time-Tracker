@@ -1,7 +1,9 @@
+from time import timezone
+from webbrowser import get
 from django.shortcuts import render
 
-from .serializers import ProjectSerializer,ReviewsSerializer,UserSerializer,ActivitySerializer
-from .models import User,Project,Reviews,Activity
+from .serializers import ProjectSerializer,ReviewsSerializer, TimeWorkedSerializer,UserSerializer,ActivitySerializer
+from .models import Time_Worked, User,Project,Reviews,Activity
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
@@ -9,7 +11,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 import jwt, datetime
+from datetime import timedelta,datetime
 
+from prodev import serializers
+# from django.utils import timezone
 # Create your views here.
 class RegisterView(APIView):
     
@@ -254,3 +259,60 @@ def projectDelete(request,id):
     activities.delete()
     
     return Response('item successfully deleted')
+
+
+
+@api_view(['GET'])
+def get_statistics(request,user_id):
+    projects = Time_Worked.objects.filter(user=user_id)
+    daily_hours = Time_Worked.objects.filter(user=user_id)
+    projects1 = Project.objects.filter(user=user_id)
+    project_len = len(projects1)
+    
+    projects1 = projects.filter(date_added=datetime.strftime(datetime.now() - timedelta(0), '%Y-%m-%d'))
+    projects2 = projects.filter(date_added=datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d'))
+    projects3 = projects.filter(date_added=datetime.strftime(datetime.now() - timedelta(2), '%Y-%m-%d'))
+    projects4 = projects.filter(date_added=datetime.strftime(datetime.now() - timedelta(3), '%Y-%m-%d'))
+    projects5 = projects.filter(date_added=datetime.strftime(datetime.now() - timedelta(4), '%Y-%m-%d'))   
+
+    serializer = ProjectSerializer(projects,many=True)  
+    return Response({'no_of_projects':project_len,'daily_minutes':{
+        'day_1': get_hours(projects1),
+        'day_2': get_hours(projects2),
+        'day_3': get_hours(projects3),
+        'day_4': get_hours(projects4),  
+        'day5':  get_hours(projects5),
+    },
+    'daily_hours': get_hours(projects1)+get_hours(projects2)+get_hours(projects3)+get_hours(projects4)+get_hours(projects5)
+    })
+
+def get_hours(projects):
+    serializer = TimeWorkedSerializer(projects,many=True)
+    minutes = 0
+    for project in serializer.data:
+        minutes = project['time_worked'] + minutes
+    return minutes
+
+
+@api_view(['GET'])
+def time_worked_get(request,user_id):
+        print(id)
+        # projects = Project.objects.filter(user=user_id) 
+        projects = Time_Worked.objects.filter(user=user_id)       
+        serializer = Project.objects.filter(id=user_id).first()
+        serializer = TimeWorkedSerializer(projects,many=True)
+        
+        return Response({'project_details':serializer.data,'projects':serializer.data})
+
+
+@api_view(['POST'])   
+def time_worked_post(request):
+        serializer = TimeWorkedSerializer(data=request.data)  
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+      
+       
+
+
+
