@@ -27,9 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
     #         user.password = make_password('password')
     #     instance.save()
     #     return instance
-        
-        
-        
+     
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
@@ -49,3 +47,4 @@ class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = '__all__'
+        

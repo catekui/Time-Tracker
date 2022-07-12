@@ -249,8 +249,9 @@ def activityUpdate(request,id):
 
 
 @api_view(['DELETE'])
-def projectDelete(request,id):
+def activityDelete(request,id):
     activities = Activity.objects.get(id = id) 
     activities.delete()
     
     return Response('item successfully deleted')
+

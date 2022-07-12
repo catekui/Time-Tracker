@@ -39,6 +39,6 @@ urlpatterns = [
     # path('project-time/<time_interval>/', views.projecttime, name='project-time'),
     path('activity-create', views.activityCreate, name='activity-create'),
     path('activity-update/<str:id>/', views.activityUpdate, name='activity-update'),
-    path('activity-delete/<str:id>/', views.projectDelete, name='activity-delete'),
+    path('activity-delete/<str:id>/', views.activityDelete, name='activity-delete'),
     # path('activity-update/<str:id>/', views.userUpdate, name='user-update'),
 ]
