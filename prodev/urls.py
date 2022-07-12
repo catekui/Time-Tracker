@@ -41,4 +41,8 @@ urlpatterns = [
     path('activity-update/<str:id>/', views.activityUpdate, name='activity-update'),
     path('activity-delete/<str:id>/', views.activityDelete, name='activity-delete'),
     # path('activity-update/<str:id>/', views.userUpdate, name='user-update'),
+    path('get_statistics/<str:user_id>/', views.get_statistics, name='get_statistics'),
+    path('time_worked_get/<str:user_id>/', views.time_worked_get, name='get_time_worked'),
+    path('time_worked_post/', views.time_worked_post, name='get_time_worked'),
+
 ]

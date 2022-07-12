@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 # Create your models here.
@@ -29,8 +30,14 @@ class Project(models.Model):
     break_interval = models.IntegerField(default=None)
     # activity = models.CharField(max_length=255,choices= choices_activity)
     
-    date_added = models.DateTimeField(auto_now_add=True)
+    #date_added = models.DateTimeField(auto_now_add=True)
+    date_added = models.DateField(auto_now_add=True)
     
+    
+    
+  
+
+
 class Reviews(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     efficiency = models.IntegerField()
@@ -44,3 +51,10 @@ class Activity(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     
     
+class Time_Worked(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    time_worked = models.IntegerField(default=0)
+    date_added = models.DateField(auto_now_add=True)
+  
+   
