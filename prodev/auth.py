@@ -1,29 +1,21 @@
-from time import timezone
-from webbrowser import get
-from django.shortcuts import render
-
-from .serializers import ProjectSerializer,ReviewsSerializer, TimeWorkedSerializer,UserSerializer,ActivitySerializer
-from .models import Time_Worked, User,Project,Reviews,Activity
-from rest_framework import viewsets
-from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
+from .serializers import UserSerializer
+from .models import User
 import jwt, datetime
-# from datetime import timedelta,datetime
 
-from prodev import serializers
-# from django.utils import timezone
+
 # Create your views here.
 class RegisterView(APIView):
-    
-    def post(self,request):
-         serializer= UserSerializer(data=request.data)
-         serializer.is_valid(raise_exception=True)
-         serializer.save()
-         return Response(serializer.data)
-     
+    def post(self, request):
+         
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
 class LoginView(APIView):
     def post(self, request):
         email = request.data['email']
@@ -34,8 +26,8 @@ class LoginView(APIView):
         if user is None:
             raise AuthenticationFailed('User not found!')
 
-        # if not user.check_password(password):
-        #     raise AuthenticationFailed('Incorrect password!')
+        if not user.check_password(password):
+            raise AuthenticationFailed('Incorrect password!')
 
         payload = {
             'id': user.id,
@@ -52,8 +44,8 @@ class LoginView(APIView):
             'jwt': token
         }
         return response
-    
-    
+
+
 class UserView(APIView):
 
     def get(self, request):
@@ -70,6 +62,7 @@ class UserView(APIView):
         user = User.objects.filter(id=payload['id']).first()
         serializer = UserSerializer(user)
         return Response(serializer.data)
+
 
 class LogoutView(APIView):
     def post(self, request):
