@@ -13,71 +13,72 @@ from rest_framework.exceptions import AuthenticationFailed
 import jwt, datetime
 from datetime import timedelta,datetime
 
-from prodev import serializers
-# from django.utils import timezone
-# Create your views here.
-class RegisterView(APIView):
+# from prodev import serializers
+# # from django.utils import timezone
+# # Create your views here.
+# class RegisterView(APIView):
     
-    def post(self,request):
-         serializer= UserSerializer(data=request.data)
-         serializer.is_valid(raise_exception=True)
-         serializer.save()
-         return Response(serializer.data)
+#     def post(self,request):
+#          serializer= UserSerializer(data=request.data)
+#          serializer.is_valid(raise_exception=True)
+#          serializer.save()
+#          return Response(serializer.data)
      
-class LoginView(APIView):
-    def post(self, request):
-        email = request.data['email']
-        password = request.data['password']
-         
-         
-        user = User.objects.filter(email=email).first()
-        
-        if user is None:
-            raise AuthenticationFailed('user not found')
-       
-        payload = {
-            'id': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-            'iat': datetime.datetime.utcnow()
-        }
-        
-        token = jwt.encode(payload, 'secret', algorithm='HS256').decode('utf-8')#token
-        
-        response = Response()
-        
-        response.set_cookie(key='jwt', value=token, httponly=True)
-        response.data = {
-            'jwt': token
-        }
-        
-        return response
+# class LoginView(APIView):
+#     def post(self, request):
+#         email = request.data['email']
+#         password = request.data['password']
+
+#         user = User.objects.filter(email=email).first()
+
+#         if user is None:
+#             raise AuthenticationFailed('User not found!')
+
+#         # if not user.check_password(password):
+#         #     raise AuthenticationFailed('Incorrect password!')
+
+#         payload = {
+#             'id': user.id,
+#             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+#             'iat': datetime.datetime.utcnow()
+#         }
+
+#         token = jwt.encode(payload, 'secret', algorithm='HS256').decode('utf-8')
+
+#         response = Response()
+
+#         response.set_cookie(key='jwt', value=token, httponly=True)
+#         response.data = {
+#             'jwt': token
+#         }
+#         return response
     
     
-class UserView(APIView):
-    def get(self, request):
-        token = request.COOKIES.get('jwt')
+# class UserView(APIView):
+#     def get(self, request):
+#         token = request.COOKIES.get('jwt')
         
-        if not token:
-            raise AuthenticationFailed('Unauthenticated!')
+#         if not token:
+#             raise AuthenticationFailed('Unauthenticated!')
         
-        try:
-            payload = jwt.decode(token, 'secret', algorithm=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Unauthenticated!')
+#         try:
+#             payload = jwt.decode(token, 'secret', algorithm=['HS256'])
+#         except jwt.ExpiredSignatureError:
+#             raise AuthenticationFailed('Unauthenticated!')
         
         
-        user = User.objects.filter(id=payload['id']).first()
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+#         user = User.objects.filter(id=payload['id']).first()
+#         serializer = UserSerializer(user)
+#         return Response(serializer.data)
     
-class LogoutView(APIView):
-    def post(self, request):
-        response = Response()
-        response.delete_cookie('jwt')
-        response.data = {
-            'message': 'success'
-        }
-        return response
+# class LogoutView(APIView):
+#     def post(self, request):
+#         response = Response()
+#         response.delete_cookie('jwt')
+#         response.data = {
+#             'message': 'success'
+#         }
+#         return response
         
         
     
@@ -260,6 +261,8 @@ def activityDelete(request,id):
     
     return Response('item successfully deleted')
 
+########################################## Dashboard ###############################################
+
 
 
 @api_view(['GET'])
@@ -312,7 +315,21 @@ def time_worked_post(request):
             serializer.save()
         return Response(serializer.data)
       
-       
+      
+##############################################reportpage#######################################################################
+
+@api_view(['GET'])  
+def report_page(request,user_id):
+    projects = Project.objects.filter(user=user_id) 
+    all_projects =[]
+    for project in projects:
+        x = Time_Worked.filter(project=project.id)
+    serializer = ProjectSerializer(projects,many=True)  
+    return Response(serializer.data)
+
+    
+    
+      
 
 
 
