@@ -2,7 +2,7 @@ from time import timezone
 from webbrowser import get
 from django.shortcuts import render
 
-from .serializers import ProjectSerializer,ReviewsSerializer, TimeWorkedSerializer,UserSerializer,ActivitySerializer
+from .serializers import ProjectSerializer,ReviewsSerializer, TimeWorkedSerializer,UserSerializer,ActivitySerializer,ReportSerializer
 from .models import Time_Worked, User,Project,Reviews,Activity
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
@@ -299,13 +299,11 @@ def get_hours(projects):
 
 @api_view(['GET'])
 def time_worked_get(request,user_id):
-        print(id)
-        # projects = Project.objects.filter(user=user_id) 
-        projects = Time_Worked.objects.filter(user=user_id)       
-        serializer = Project.objects.filter(id=user_id).first()
-        serializer = TimeWorkedSerializer(projects,many=True)
-        
-        return Response({'project_details':serializer.data,'projects':serializer.data})
+        projects = Time_Worked.objects.all().filter(user=user_id)
+
+        serializers = ReportSerializer(projects, many=True)
+
+        return Response(serializers.data)
 
 
 @api_view(['POST'])   

@@ -53,3 +53,11 @@ class TimeWorkedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Time_Worked
         fields = '__all__'
+
+
+
+class ReportSerializer(serializers.ModelSerializer):
+    project = ProjectSerializer()
+    class Meta:
+        model = Time_Worked
+        fields = '__all__'
